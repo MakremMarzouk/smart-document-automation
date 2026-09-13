@@ -18,7 +18,37 @@ from app.services.text_extractor import TextExtractor
 from app.services.llm_extractor import LLMExtractor
 from app.services.validator import InvoiceValidator
 import logging
+
 logger = logging.getLogger(__name__)
+
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024
+
+
+def validate_upload(file: UploadFile):
+    """Validate filename, extension, and size before saving an upload."""
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No filename provided")
+
+    filename = os.path.basename(file.filename)
+    extension = os.path.splitext(filename)[1].lower()
+
+    if extension not in {".pdf", ".txt"}:
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF and TXT files are supported.",
+        )
+
+    file.file.seek(0, os.SEEK_END)
+    file_size = file.file.tell()
+    file.file.seek(0)
+
+    if file_size > MAX_UPLOAD_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail="File is too large. Maximum size is 10 MB.",
+        )
+
+    return filename
 
 
 def process_document_in_background(document_id: int):
@@ -71,8 +101,7 @@ router = APIRouter()
 
 @router.post("/", response_model=DocumentResponse)
 async def upload_document(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No filename provided")
+    original_filename = validate_upload(file)
 
     # 1. Ensure incoming directory exists
     incoming_dir = os.path.join(settings.STORAGE_DIR, "incoming")
@@ -80,7 +109,7 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
     
     # 2. Make the filename unique by adding a timestamp so we don't overwrite files
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    safe_filename = f"{timestamp}_{file.filename}"
+    safe_filename = f"{timestamp}_{original_filename}"
     file_path = os.path.join(incoming_dir, safe_filename)
     
     # 3. Save the physical file to disk
@@ -92,7 +121,7 @@ async def upload_document(file: UploadFile = File(...), db: Session = Depends(ge
         
     # 4. Create the Database record
     db_document = Document(
-        filename=file.filename,
+        filename=original_filename,
         file_path=file_path,
         status="uploaded"
     )
@@ -110,14 +139,13 @@ async def auto_process_document(
 ):
     """Upload, extract text, extract structured data, and validate automatically."""
 
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No filename provided")
+    original_filename = validate_upload(file)
 
     incoming_dir = os.path.join(settings.STORAGE_DIR, "incoming")
     os.makedirs(incoming_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    safe_filename = f"{timestamp}_{file.filename}"
+    safe_filename = f"{timestamp}_{original_filename}"
     file_path = os.path.join(incoming_dir, safe_filename)
 
     try:
@@ -125,7 +153,7 @@ async def auto_process_document(
             shutil.copyfileobj(file.file, buffer)
 
         doc = Document(
-            filename=file.filename,
+            filename=original_filename,
             file_path=file_path,
             status="uploaded"
         )
@@ -170,14 +198,13 @@ async def auto_background_process_document(
 ):
     """Upload a document and process it in the background."""
 
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No filename provided")
+    original_filename = validate_upload(file)
 
     incoming_dir = os.path.join(settings.STORAGE_DIR, "incoming")
     os.makedirs(incoming_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    safe_filename = f"{timestamp}_{file.filename}"
+    safe_filename = f"{timestamp}_{original_filename}"
     file_path = os.path.join(incoming_dir, safe_filename)
 
     try:
@@ -185,7 +212,7 @@ async def auto_background_process_document(
             shutil.copyfileobj(file.file, buffer)
 
         doc = Document(
-            filename=file.filename,
+            filename=original_filename,
             file_path=file_path,
             status="uploaded"
         )

@@ -82,7 +82,7 @@ flowchart LR
 
 ## 🚀 Tech Stack
 
-- **Backend**: Python 3.11, FastAPI, Pydantic v2
+- **Backend**: Python 3.11+, FastAPI, Pydantic v2
 - **Database & ORM**: PostgreSQL 15, SQLAlchemy 2.0
 - **Document Processing**: `pypdf` (Text extraction)
 - **AI & LLM**: Ollama (`llama3.2` running locally)
@@ -120,6 +120,9 @@ smart-doc-automation/
 ├── docker-compose.yml           # Multi-container orchestration (App + DB)
 ├── Dockerfile                   # FastAPI container definition
 ├── requirements.txt             # Python dependencies
+├── frontend/                    # Browser interface (HTML, CSS, JavaScript)
+├── scripts/                     # Batch-upload demonstration
+├── tests/                       # Automated validator and API tests
 ├── PROGRESS.md                  # Project roadmap & progress tracker
 └── README.md
 ```
@@ -137,11 +140,29 @@ smart-doc-automation/
 
 ### 2. Launch with Docker Compose
 ```bash
+cp .env.example .env
+# Edit .env and replace the local database password placeholder.
 docker compose up --build
 ```
 
 The interactive Swagger documentation will be available at:
 👉 **`http://localhost:8000/docs`**
+
+### 3. Launch the browser interface
+
+With the API running, use a second terminal:
+
+```bash
+python -m http.server 5500 --directory frontend
+```
+
+Open **`http://localhost:5500`**. The included interface is configured for local development and connects to the API on port 8000.
+
+## 🔐 Security Notes
+
+This repository is a local development and portfolio demonstration. Before production use, add authentication and authorization, HTTPS, rate limiting, persistent database migrations, malware scanning, stronger upload validation, and secret management. The API currently has no user authentication, so it should not be exposed directly to the public internet.
+
+Local credentials belong in `.env`, which is ignored by Git. Only `.env.example`, containing placeholders, is tracked.
 
 ---
 
