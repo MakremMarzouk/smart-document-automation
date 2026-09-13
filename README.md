@@ -19,6 +19,16 @@ An end-to-end intelligent document processing pipeline designed to parse, extrac
 
 ---
 
+## ✅ Project Status
+
+**Smart Document Automation v1.0 — Complete**
+
+The v1.0 release includes the end-to-end invoice pipeline, local LLM extraction, deterministic validation, human review workflows, background processing, a browser interface, automated tests, Docker support, and portfolio documentation.
+
+The current release is intended for local development and demonstration. Production deployment would require authentication, HTTPS, rate limiting, database migrations, malware scanning, and managed secret storage.
+
+---
+
 ## 🏗️ Architecture & Pipeline
 
 ```text
