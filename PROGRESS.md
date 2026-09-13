@@ -63,10 +63,10 @@ Last Updated: Phase 8 Complete
 - [x] Tested the complete review workflow successfully
 - [x] Git Commit: `feat: implement review queue and manual approval workflow`
 
-### ✅ Phase 6: Background Workers & End-to-End Pipeline
+### ✅ Phase 6: Background Tasks & End-to-End Pipeline
 - [x] Implemented single automated pipeline endpoint `POST /upload/auto` that runs Upload -> Extract -> Parse -> Validate in one step
 - [x] Tested the complete automatic pipeline successfully
-- [x] Introduced background task processing with `POST /upload/auto-background`
+- [x] Introduced FastAPI in-process background task processing with `POST /upload/auto-background`
 - [x] Tested asynchronous processing and status progression successfully
 - [x] Git Commit: `feat: add background document processing`
 

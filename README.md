@@ -52,31 +52,9 @@ An end-to-end intelligent document processing pipeline designed to parse, extrac
 
 ## 🔄 Processing Flows
 
-### Synchronous processing
+![Smart Document Automation architecture](docs/architecture.svg)
 
-```mermaid
-flowchart LR
-    A[Upload invoice] --> B[Save file]
-    B --> C[Extract PDF text]
-    C --> D[Ollama structured extraction]
-    D --> E[Validate accounting rules]
-    E --> F{Valid?}
-    F -->|Yes| G[Status: valid]
-    F -->|No| H[Status: needs_review]
-```
-
-### Background processing
-
-```mermaid
-flowchart LR
-    A[Upload invoice] --> B[Save file]
-    B --> C[Return status: uploaded]
-    C --> D[Background task]
-    D --> E[Extract text]
-    E --> F[Extract structured data]
-    F --> G[Validate]
-    G --> H[Update final status]
-```
+The background endpoint uses FastAPI `BackgroundTasks` for lightweight in-process asynchronous work. This project does not use Celery, Redis, or a distributed worker system.
 
 ---
 
