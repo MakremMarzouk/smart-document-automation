@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Document Automation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="app-shell">
+        <header class="app-header">
+            <div>
+                <p class="eyebrow">DOCUMENT INTELLIGENCE</p>
+                <h1>Smart Document Automation</h1>
+                <p class="subtitle">
+                    Upload invoices, extract structured data, and validate them automatically.
+                </p>
+            </div>
+
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                API Ready
+            </div>
+        </header>
+
+        <section class="upload-card">
+            <div class="card-heading">
+                <div>
+                    <h2>Process a new invoice</h2>
+                    <p>Upload a PDF and let the local AI pipeline handle the rest.</p>
+                </div>
+            </div>
+
+            <label class="drop-zone" for="invoice-file">
+                <span class="upload-icon">↑</span>
+                <strong>Choose an invoice PDF</strong>
+                <span>or drag and drop it here</span>
+                <input id="invoice-file" type="file" accept=".pdf,.txt">
+            </label>
+
+            <div id="selected-file" class="selected-file hidden"></div>
+
+            <button id="upload-button" class="primary-button" disabled>
+                Process invoice
+            </button>
+
+            <div id="message" class="message hidden"></div>
+        </section>
+        <section class="queue-card">
+            <div class="card-heading">
+                <div>
+                    <p class="eyebrow">MANUAL REVIEW</p>
+                    <h2>Review queue</h2>
+                    <p>Invoices that need attention before approval.</p>
+                </div>
+
+                <button id="refresh-queue-button" class="secondary-button">
+                    Refresh queue
+                </button>
+            </div>
+
+            <div id="queue-list" class="queue-list">
+                <p class="empty-state">No invoices currently need review.</p>
+            </div>
+        </section>
+        <div id="correction-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">MANUAL CORRECTION</p>
+                        <h2>Correct invoice data</h2>
+                        <p>Update the fields, then submit for automatic revalidation.</p>
+                    </div>
+
+                    <button id="close-modal-button" class="secondary-button">
+                        Close
+                    </button>
+                </div>
+
+                <form id="correction-form">
+                    <input id="correction-document-id" type="hidden">
+
+                    <div class="form-grid">
+                        <label>
+                            Invoice number
+                            <input id="correction-invoice-number" type="text" required>
+                        </label>
+
+                        <label>
+                            Vendor name
+                            <input id="correction-vendor-name" type="text" required>
+                        </label>
+
+                        <label>
+                            Invoice date
+                            <input id="correction-invoice-date" type="date" required>
+                        </label>
+
+                        <label>
+                            Due date
+                            <input id="correction-due-date" type="date">
+                        </label>
+
+                        <label>
+                            Item description
+                            <input id="correction-item-description" type="text" required>
+                        </label>
+
+                        <label>
+                            Quantity
+                            <input id="correction-item-quantity" type="number" step="0.01" required>
+                        </label>
+
+                        <label>
+                            Unit price
+                            <input id="correction-item-unit-price" type="number" step="0.01" required>
+                        </label>
+
+                        <label>
+                            Subtotal
+                            <input id="correction-subtotal" type="number" step="0.01" required>
+                        </label>
+
+                        <label>
+                            Tax amount
+                            <input id="correction-tax" type="number" step="0.01" required>
+                        </label>
+
+                        <label>
+                            Total amount
+                            <input id="correction-total" type="number" step="0.01" required>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="primary-button">
+                        Save correction
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <section id="result-card" class="result-card hidden">
+            <div class="card-heading">
+                <div>
+                    <p class="eyebrow">LATEST RESULT</p>
+                    <h2 id="result-title">Invoice processed</h2>
+                </div>
+
+                <span id="result-status" class="status-badge"></span>
+            </div>
+            
+            <div class="result-grid">
+                <div>
+                    <span class="field-label">Document ID</span>
+                    <strong id="result-id">—</strong>
+                </div>
+
+                <div>
+                    <span class="field-label">Filename</span>
+                    <strong id="result-filename">—</strong>
+                </div>
+
+                <div>
+                    <span class="field-label">Invoice number</span>
+                    <strong id="result-invoice-number">—</strong>
+                </div>
+
+                <div>
+                    <span class="field-label">Vendor</span>
+                    <strong id="result-vendor">—</strong>
+                </div>
+
+                <div>
+                    <span class="field-label">Total amount</span>
+                    <strong id="result-total">—</strong>
+                </div>
+
+                <div>
+                    <span class="field-label">Validation errors</span>
+                    <strong id="result-errors">—</strong>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
