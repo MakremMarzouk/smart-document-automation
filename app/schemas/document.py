@@ -8,8 +8,8 @@ class DocumentResponse(BaseModel):
     filename: str
     status: str
     raw_text: Optional[str] = None 
-    extracted_data: Optional[Dict[str, Any]] = None  # <-- Added this
-    validation_errors: Optional[List[str]] = None  # <-- Added this
+    extracted_data: Optional[Dict[str, Any]] = None
+    validation_errors: Optional[List[str]] = None
     created_at: datetime
     
     model_config = ConfigDict(from_attributes=True)

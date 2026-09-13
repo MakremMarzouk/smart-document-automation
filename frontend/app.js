@@ -23,6 +23,15 @@ function showMessage(text) {
     message.classList.remove("hidden");
 }
 
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
 function selectFile(file) {
     if (!file) {
         return;
@@ -146,17 +155,17 @@ async function loadReviewQueue() {
                 return `
                     <article class="queue-item">
                         <div class="queue-item-info">
-                            <strong>${document.filename}</strong>
+                            <strong>${escapeHtml(document.filename)}</strong>
                             <span>
                                 Invoice:
-                                ${document.extracted_data?.invoice_number || "—"}
+                                ${escapeHtml(document.extracted_data?.invoice_number || "—")}
                             </span>
                             <span>
                                 Vendor:
-                                ${document.extracted_data?.vendor_name || "—"}
+                                ${escapeHtml(document.extracted_data?.vendor_name || "—")}
                             </span>
                             <span class="queue-error">
-                                ${errors.join(", ")}
+                                ${escapeHtml(errors.join(", "))}
                             </span>
                         </div>
 
