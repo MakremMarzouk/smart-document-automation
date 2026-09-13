@@ -4,6 +4,21 @@ An end-to-end intelligent document processing pipeline designed to parse, extrac
 
 ---
 
+## ✨ Key Features
+
+- Automated PDF/TXT invoice processing
+- Local LLM extraction with Ollama and Llama 3.2
+- Structured Pydantic outputs
+- Deterministic accounting validation
+- Human-in-the-loop review workflow
+- Background document processing
+- PostgreSQL persistence
+- Dockerized local environment
+- Automated API and validation tests
+- €0 cloud/API cost when run locally
+
+---
+
 ## 🏗️ Architecture & Pipeline
 
 ```text
