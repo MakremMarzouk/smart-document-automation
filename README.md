@@ -77,7 +77,9 @@ The current release is intended for local development and demonstration. Product
 
 ## 🔄 Processing Flows
 
-![Smart Document Automation architecture](docs/architecture.svg)
+![Smart Document Automation architecture](docs/architecture-overview.png)
+
+The architecture overview above summarizes the user interface, FastAPI services, document storage, local Ollama extraction, validation engine, review queue, and Dockerized PostgreSQL environment. A lightweight SVG version is also available at [`docs/architecture.svg`](docs/architecture.svg).
 
 The background endpoint uses FastAPI `BackgroundTasks` for lightweight in-process asynchronous work. This project does not use Celery, Redis, or a distributed worker system.
 
